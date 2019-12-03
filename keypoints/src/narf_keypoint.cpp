@@ -46,7 +46,7 @@ namespace pcl
 
 /////////////////////////////////////////////////////////////////////////
 NarfKeypoint::NarfKeypoint (RangeImageBorderExtractor* range_image_border_extractor, float support_size) :
-    BaseClass (), interest_image_ (nullptr), interest_points_ (nullptr)
+    interest_image_ (nullptr), interest_points_ (nullptr)
 {
   name_ = "NarfKeypoint";
   clearData ();
@@ -68,13 +68,13 @@ void
 {
   //std::cerr << __PRETTY_FUNCTION__<<" called.\n";
   
-  for (size_t scale_space_idx = 1; scale_space_idx<border_extractor_scale_space_.size (); ++scale_space_idx)
+  for (std::size_t scale_space_idx = 1; scale_space_idx<border_extractor_scale_space_.size (); ++scale_space_idx)
     delete border_extractor_scale_space_[scale_space_idx];
   border_extractor_scale_space_.clear ();
-  for (size_t scale_space_idx = 1; scale_space_idx<range_image_scale_space_.size (); ++scale_space_idx)
+  for (std::size_t scale_space_idx = 1; scale_space_idx<range_image_scale_space_.size (); ++scale_space_idx)
     delete range_image_scale_space_[scale_space_idx];
   range_image_scale_space_.clear ();
-  for (size_t scale_space_idx = 1; scale_space_idx<interest_image_scale_space_.size (); ++scale_space_idx)
+  for (std::size_t scale_space_idx = 1; scale_space_idx<interest_image_scale_space_.size (); ++scale_space_idx)
     delete[] interest_image_scale_space_[scale_space_idx];
   interest_image_scale_space_.clear ();
   is_interest_point_image_.clear ();
@@ -146,7 +146,7 @@ namespace
     Eigen::Vector3f rotated_direction = rotation*direction;
     Eigen::Vector2f direction_vector (rotated_direction[0], rotated_direction[1]);
     direction_vector.normalize ();
-    float angle = 0.5f*normAngle (2.0f*acosf (direction_vector[0]));
+    float angle = 0.5f*normAngle (2.0f*std::acos (direction_vector[0]));
     return (angle);
   }
   
@@ -158,7 +158,7 @@ namespace
     if (new_radius >= 2)
     {
       float mapping_factor = 1.0f + (1.0f / static_cast<float> (new_radius-1));
-      for (size_t old_idx=0; old_idx<old_beams.size (); ++old_idx)
+      for (std::size_t old_idx=0; old_idx<old_beams.size (); ++old_idx)
       {
         if (old_beams[old_idx])
         {
@@ -318,7 +318,7 @@ NarfKeypoint::calculateCompleteInterestImage ()
       
       angle_histogram.clear ();
       angle_histogram.resize(angle_histogram_size, 0);
-      for (size_t neighbors_to_check_idx=0; neighbors_to_check_idx<neighbors_to_check.size (); ++neighbors_to_check_idx)
+      for (std::size_t neighbors_to_check_idx=0; neighbors_to_check_idx<neighbors_to_check.size (); ++neighbors_to_check_idx)
       {
         int index2 = neighbors_to_check[neighbors_to_check_idx];
         if (!range_image.isValid (index2))
@@ -330,7 +330,7 @@ NarfKeypoint::calculateCompleteInterestImage ()
             x2 = index2 - y2*range_image.width;
         const PointWithRange& point2 = range_image.getPoint (index2);
         
-        float pixelDistance = static_cast<float> (std::max (abs (x2-x), abs (y2-y)));
+        float pixelDistance = static_cast<float> (std::max (std::abs (x2-x), std::abs (y2-y)));
         float distance_squared = squaredEuclideanDistance (point, point2);
         if (pixelDistance > 2.0f)  // Always consider immediate neighbors, even if to far away
         {
@@ -364,7 +364,7 @@ NarfKeypoint::calculateCompleteInterestImage ()
                      current_negative_score, positive_score);
         float angle = nkdGetDirectionAngle (surface_change_direction, rotation_to_viewer_coordinate_system);
         int histogram_cell = (std::min) (angle_histogram_size-1,
-                          static_cast<int> (pcl_lrint (floorf ( (angle+deg2rad (90.0f))/deg2rad (180.0f) * angle_histogram_size))));
+                          static_cast<int> (pcl_lrint (std::floor ( (angle+deg2rad (90.0f))/deg2rad (180.0f) * angle_histogram_size))));
         float& histogram_value = angle_histogram[histogram_cell];
         
         histogram_value = (std::max) (histogram_value, positive_score);
@@ -501,7 +501,7 @@ NarfKeypoint::calculateSparseInterestImage ()
       angle_elements[angle_histogram_idx].clear ();
     }
     
-    for (size_t neighbors_to_check_idx=0; neighbors_to_check_idx<neighbors_to_check.size (); ++neighbors_to_check_idx)
+    for (std::size_t neighbors_to_check_idx=0; neighbors_to_check_idx<neighbors_to_check.size (); ++neighbors_to_check_idx)
     {
       int index2 = neighbors_to_check[neighbors_to_check_idx];
       if (!range_image.isValid (index2))
@@ -513,7 +513,7 @@ NarfKeypoint::calculateSparseInterestImage ()
           x2 = index2 - y2*range_image.width;
       const PointWithRange& point2 = range_image.getPoint (index2);
       
-      float pixelDistance = static_cast<float> (std::max (abs (x2-x), abs (y2-y)));
+      float pixelDistance = static_cast<float> (std::max (std::abs (x2-x), std::abs (y2-y)));
 
       float distance_squared = squaredEuclideanDistance (point, point2);
       if (distance_squared <= radius_overhead_squared) 
@@ -545,7 +545,7 @@ NarfKeypoint::calculateSparseInterestImage ()
       
       float angle = nkdGetDirectionAngle (surface_change_direction, rotation_to_viewer_coordinate_system);
       int histogram_cell = (std::min) (angle_histogram_size-1,
-                                       static_cast<int> (pcl_lrint (floorf ( (angle+deg2rad (90.0f))/deg2rad (180.0f) * angle_histogram_size))));
+                                       static_cast<int> (pcl_lrint (std::floor ( (angle+deg2rad (90.0f))/deg2rad (180.0f) * angle_histogram_size))));
       float& histogram_value = angle_histogram[histogram_cell];
       histogram_value = (std::max) (histogram_value, surface_change_score);
       angle_elements[histogram_cell].push_back (std::make_pair(index2, surface_change_score));
@@ -647,7 +647,7 @@ NarfKeypoint::calculateSparseInterestImage ()
             const PointWithRange& point3 = range_image.getPoint (index3);
             float surface_change_score = relevent_point_index.second;
             
-            float pixelDistance = static_cast<float> (std::max (abs (x3-x2), abs (y3-y2)));
+            float pixelDistance = static_cast<float> (std::max (std::abs (x3-x2), std::abs (y3-y2)));
             float distance = (point3.getVector3fMap ()-point2.getVector3fMap ()).norm ();
             float distance_factor = radius_reciprocal*distance;
             float positive_score, current_negative_score;
@@ -716,7 +716,7 @@ NarfKeypoint::calculateInterestPoints ()
   is_interest_point_image_.clear ();
   is_interest_point_image_.resize (size, false);
   
-  typedef double RealForPolynomial;
+  using RealForPolynomial = double;
   PolynomialCalculationsT<RealForPolynomial> polynomial_calculations;
   BivariatePolynomialT<RealForPolynomial> polynomial (2);
   std::vector<Eigen::Matrix<RealForPolynomial, 3, 1>, Eigen::aligned_allocator<Eigen::Matrix<RealForPolynomial, 3, 1> > > sample_points;
@@ -854,7 +854,7 @@ NarfKeypoint::calculateInterestPoints ()
     if (range_image.isValid (image_x, image_y))
       is_interest_point_image_[image_y*width + image_x] = true;
   }
-  interest_points_->width = static_cast<uint32_t> (interest_points_->points.size ());
+  interest_points_->width = static_cast<std::uint32_t> (interest_points_->points.size ());
   interest_points_->height = 1;
   interest_points_->is_dense = true;
 }

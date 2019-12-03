@@ -55,8 +55,7 @@ namespace pcl
           root_node_ (new BranchNode ()),
           depth_mask_ (0),
           octree_depth_ (0),
-          dynamic_depth_enabled_ (false),
-          max_key_ ()
+          dynamic_depth_enabled_ (false)
       {
       }
 
@@ -308,14 +307,11 @@ namespace pcl
             return createLeafRecursive (key_arg, depth_mask_arg / 2, childBranch, return_leaf_arg, parent_of_leaf_arg);
 
           }
-          else
-          {
-            // if leaf node at child_idx does not exist
-            LeafNode* leaf_node = createLeafChild (*branch_arg, child_idx);
-            return_leaf_arg = leaf_node;
-            parent_of_leaf_arg = branch_arg;
-            this->leaf_count_++;
-          }
+          // if leaf node at child_idx does not exist
+          LeafNode* leaf_node = createLeafChild (*branch_arg, child_idx);
+          return_leaf_arg = leaf_node;
+          parent_of_leaf_arg = branch_arg;
+          this->leaf_count_++;
         }
         else
         {

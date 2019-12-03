@@ -86,7 +86,7 @@ pcl::CRHEstimation<PointInT, PointNT, PointOutT>::computeFeature (PointCloudOut 
   pcl::PointCloud<pcl::PointNormal> grid;
   grid.points.resize (indices_->size ());
 
-  for (size_t i = 0; i < indices_->size (); i++)
+  for (std::size_t i = 0; i < indices_->size (); i++)
   {
     grid.points[i].getVector4fMap () = surface_->points[(*indices_)[i]].getVector4fMap ();
     grid.points[i].getNormalVector4fMap () = normals_->points[(*indices_)[i]].getNormalVector4fMap ();
@@ -103,7 +103,7 @@ pcl::CRHEstimation<PointInT, PointNT, PointOutT>::computeFeature (PointCloudOut 
   int bin = 0;
   for (const auto &point : grid.points)
   {
-    bin = static_cast<int> ((((atan2 (point.normal_y, point.normal_x) + M_PI) * 180 / M_PI) / bin_angle)) % nbins;
+    bin = static_cast<int> ((((std::atan2 (point.normal_y, point.normal_x) + M_PI) * 180 / M_PI) / bin_angle)) % nbins;
     w = std::sqrt (point.normal_y * point.normal_y + point.normal_x * point.normal_x);
     sum_w += w;
     spatial_data[bin] += w;

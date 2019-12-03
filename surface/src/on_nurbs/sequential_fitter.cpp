@@ -490,7 +490,7 @@ SequentialFitter::grow (float max_dist, float max_angle, unsigned min_length, un
     throw std::runtime_error ("[SequentialFitter::grow] size of boundary indices and boundary parameters do not match.");
   }
 
-  float angle = cosf (max_angle);
+  float angle = std::cos (max_angle);
   unsigned bnd_moved (0);
 
   for (unsigned i = 0; i < num_bnd; i++)
@@ -548,12 +548,10 @@ SequentialFitter::grow (float max_dist, float max_angle, unsigned min_length, un
 
       if (row >= int (m_cloud->height) || row < 0)
       {
-        j = max_length;
         break;
       }
       if (col >= int (m_cloud->width) || col < 0)
       {
-        j = max_length;
         break;
       }
 
@@ -608,7 +606,7 @@ unsigned
 SequentialFitter::PCL2ON (pcl::PointCloud<pcl::PointXYZRGB>::Ptr &pcl_cloud, const std::vector<int> &indices,
                           vector_vec3d &on_cloud)
 {
-  size_t numPoints = 0;
+  std::size_t numPoints = 0;
 
   for (const int &index : indices)
   {

@@ -67,11 +67,11 @@ namespace pcl
 
     public:
 
-      NNClassification () : tree_ (), classes_ (), labels_idx_ () {}
+      NNClassification () : tree_ () {}
 
       /** \brief Result is a list of class labels and scores */
-      typedef std::pair<std::vector<std::string>, std::vector<float> > Result;
-      typedef boost::shared_ptr<Result> ResultPtr;
+      using Result = std::pair<std::vector<std::string>, std::vector<float> >;
+      using ResultPtr = boost::shared_ptr<Result>;
 
       // TODO setIndices method, distance metrics and reset tree
 
@@ -116,15 +116,17 @@ namespace pcl
 
         // Save the mapping from labels to indices in the class list
         std::map<std::string, int> label2idx;
-        for (std::vector<std::string>::const_iterator it = classes_.begin (); it != classes_.end (); it++)
-          label2idx[*it] = int (it - classes_.begin ());
+        for (std::size_t i = 0; i < classes_.size(); ++i)
+        {
+            label2idx[classes_[i]] = i;
+        }
 
         // Create a list holding the class index of each label
         labels_idx_.reserve (labels.size ());
-        BOOST_FOREACH (std::string s, labels)
+        for (const auto &s : labels)
+        {
           labels_idx_.push_back (label2idx[s]);
-//        for (std::vector<std::string>::const_iterator it = labels.begin (); it != labels.end (); it++)
-//          labels_idx_.push_back (label2idx[*it]);
+        }
       }
 
       /** \brief Load the list of training examples and corresponding labels.
@@ -133,7 +135,7 @@ namespace pcl
         * \return true on success, false on failure (read error or number of entries don't match)
         */
       bool 
-      loadTrainingFeatures(std::string file_name, std::string labels_file_name)
+      loadTrainingFeatures(const std::string& file_name, const std::string& labels_file_name)
       {
         typename pcl::PointCloud<PointT>::Ptr cloud (new pcl::PointCloud<PointT>);
         if (pcl::io::loadPCDFile (file_name.c_str (), *cloud) != 0)
@@ -157,7 +159,7 @@ namespace pcl
         * \return true on success, false on failure (write error or number of entries don't match)
         */
       bool 
-      saveTrainingFeatures (std::string file_name, std::string labels_file_name)
+      saveTrainingFeatures (const std::string& file_name, const std::string& labels_file_name)
       {
         typename pcl::PointCloud<PointT>::ConstPtr training_features = tree_->getInputCloud ();
         if (labels_idx_.size () == training_features->points.size ())
@@ -165,8 +167,10 @@ namespace pcl
           if (pcl::io::savePCDFile (file_name.c_str (), *training_features) != 0)
             return (false);
           std::ofstream f (labels_file_name.c_str ());
-          BOOST_FOREACH (int i, labels_idx_)
+          for (const int& i : labels_idx_)
+          {
             f << classes_[i] << "\n";
+          }
           return (true);
         }
         return (false);
@@ -289,7 +293,7 @@ namespace pcl
           {
             result->first.push_back (classes_[it - sqr_distances->begin ()]);
             // TODO leave it squared, and relate param to sigma...
-            result->second.push_back (expf (-std::sqrt (*it) / gaussian_param));
+            result->second.push_back (std::exp (-std::sqrt (*it) / gaussian_param));
           }
 
         // Return label/score list pair

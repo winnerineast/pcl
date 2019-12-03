@@ -55,10 +55,10 @@ namespace pcl
   {
     public:
       // =====TYPEDEFS=====
-      typedef pcl::PointCloud<PointWithRange> BaseClass;
-      typedef std::vector<Eigen::Vector3f, Eigen::aligned_allocator<Eigen::Vector3f> > VectorOfEigenVector3f;
-      typedef boost::shared_ptr<RangeImage> Ptr;
-      typedef boost::shared_ptr<const RangeImage> ConstPtr;
+      using BaseClass = pcl::PointCloud<PointWithRange>;
+      using VectorOfEigenVector3f = std::vector<Eigen::Vector3f, Eigen::aligned_allocator<Eigen::Vector3f> >;
+      using Ptr = boost::shared_ptr<RangeImage>;
+      using ConstPtr = boost::shared_ptr<const RangeImage>;
       
       enum CoordinateFrame
       {
@@ -71,7 +71,7 @@ namespace pcl
       /** Constructor */
       PCL_EXPORTS RangeImage ();
       /** Destructor */
-      PCL_EXPORTS ~RangeImage ();
+      PCL_EXPORTS virtual ~RangeImage () = default;
       
       // =====STATIC VARIABLES=====
       /** The maximum number of openmp threads that can be used in this class */
@@ -758,8 +758,8 @@ namespace pcl
       // BaseClass:
       //   roslib::Header header;
       //   std::vector<PointT> points;
-      //   uint32_t width;
-      //   uint32_t height;
+      //   std::uint32_t width;
+      //   std::uint32_t height;
       //   bool is_dense;
 
       static bool debug; /**< Just for... well... debugging purposes. :-) */
@@ -795,7 +795,7 @@ namespace pcl
       static inline float
       asinLookUp (float value);
       
-      /** Query the atan2 lookup table */
+      /** Query the std::atan2 lookup table */
       static inline float
       atan2LookUp (float y, float x);
      
@@ -805,7 +805,7 @@ namespace pcl
 
 
     public:
-      EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+      PCL_MAKE_ALIGNED_OPERATOR_NEW
   };
 
   /**

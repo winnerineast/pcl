@@ -90,9 +90,6 @@ class Cloud : public Statistics
     /// variables of this object are initialized but not set.
     Cloud (const Cloud3D& cloud, bool register_stats=false);
 
-    /// @brief Destructor
-    ~Cloud ();
-
     /// @brief Equal Operator
     /// @details Deep copies all the state of the passed cloud to this cloud.
     /// @param cloud The cloud object whose status to be copied to this object
@@ -204,7 +201,7 @@ class Cloud : public Statistics
     /// a faster rendering mode; this also occurs if the selection object is
     /// empty.
     void
-    setSelection (SelectionPtr selection_ptr);
+    setSelection (const SelectionPtr& selection_ptr);
 
     /// @brief Sets the RGB values for coloring points in COLOR_BY_PURE mode.
     /// @param r the value for red color

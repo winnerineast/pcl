@@ -47,7 +47,7 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr cloud;
 void
 createColorCloud (pcl::PointCloud<pcl::PointXYZRGBA> &colorCloud)
 {
-  for (size_t i = 0; i < cloud->points.size (); ++i)
+  for (std::size_t i = 0; i < cloud->points.size (); ++i)
   {
     pcl::PointXYZRGBA p;
     p.getVector3fMap () = cloud->points[i].getVector3fMap ();
@@ -114,7 +114,7 @@ TEST (PCL, GASDShapeEstimationNoInterp)
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
   EXPECT_EQ (descriptor.points.size (), 1);
-  for (size_t i = 0; i < size_t (descriptor.points[0].descriptorSize ()); ++i)
+  for (std::size_t i = 0; i < std::size_t (descriptor.points[0].descriptorSize ()); ++i)
   {
     EXPECT_NEAR (descriptor.points[0].histogram[i], ref_values[i], 1e-5);
   }
@@ -158,7 +158,7 @@ TEST(PCL, GASDShapeEstimationTrilinearInterp)
     0, 0, 0, 0, 0, 0, 0, 0};
 
   EXPECT_EQ (descriptor.points.size (), 1);
-  for (size_t i = 0; i < size_t (descriptor.points[0].descriptorSize ()); ++i)
+  for (std::size_t i = 0; i < std::size_t (descriptor.points[0].descriptorSize ()); ++i)
   {
     EXPECT_NEAR (descriptor.points[0].histogram[i], ref_values[i], 1e-5);
   }
@@ -178,7 +178,7 @@ TEST (PCL, GASDShapeAndColorEstimationNoInterp)
   gasd.compute (descriptor);
 
   const float ref_values[984] =
-  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1.0101, 0, 0, 0, 0, 3.53535, 1.26263, 0, 0, 0,
+  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.757576, 0, 0, 0, 0, 3.53535, 1.26263, 0, 0, 0,
     1.51515, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.757576, 0, 0, 0, 0, 0.757576, 6.06061, 0,
     0, 0, 0, 4.0404, 1.51515, 0, 0, 0, 0, 6.81818, 0, 0, 0, 0, 0, 1.76768, 1.76768, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0.50505, 0, 0, 0, 0, 0, 3.78788, 0.50505, 0, 0, 0, 0, 5.80808, 0, 0, 0, 0, 0, 2.0202,
@@ -217,7 +217,7 @@ TEST (PCL, GASDShapeAndColorEstimationNoInterp)
     0, 0, 0, 0, 0, 0, 0, 0};
 
   EXPECT_EQ (descriptor.points.size (), 1);
-  for (size_t i = 0; i < size_t (descriptor.points[0].descriptorSize ()); ++i)
+  for (std::size_t i = 0; i < std::size_t (descriptor.points[0].descriptorSize ()); ++i)
   {
     EXPECT_NEAR (descriptor.points[0].histogram[i], ref_values[i], 1e-5);
   }
@@ -238,7 +238,7 @@ TEST(PCL, GASDShapeAndColorEstimationQuadrilinearInterp)
   gasd.compute (descriptor);
 
   const float ref_values[984] =
-  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1.0101, 0, 0, 0, 0, 3.53535, 1.26263, 0, 0, 0,
+  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.757576, 0, 0, 0, 0, 3.53535, 1.26263, 0, 0, 0,
     1.51515, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.757576, 0, 0, 0, 0, 0.757576, 6.06061, 0,
     0, 0, 0, 4.0404, 1.51515, 0, 0, 0, 0, 6.81818, 0, 0, 0, 0, 0, 1.76768, 1.76768, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0.50505, 0, 0, 0, 0, 0, 3.78788, 0.50505, 0, 0, 0, 0, 5.80808, 0, 0, 0, 0, 0, 2.0202,
@@ -304,7 +304,7 @@ TEST(PCL, GASDShapeAndColorEstimationQuadrilinearInterp)
     0, 0, 0, 0, 0, 0, 0, 0};
 
   EXPECT_EQ (descriptor.points.size (), 1);
-  for (size_t i = 0; i < size_t( descriptor.points[0].descriptorSize ()); ++i)
+  for (std::size_t i = 0; i < std::size_t( descriptor.points[0].descriptorSize ()); ++i)
   {
     EXPECT_NEAR (descriptor.points[0].histogram[i], ref_values[i], 1e-5);
   }

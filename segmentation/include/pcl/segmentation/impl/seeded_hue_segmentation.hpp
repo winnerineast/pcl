@@ -90,7 +90,7 @@ pcl::seededHueSegmentation (const PointCloud<PointXYZRGB>          &cloud,
         continue;
       }
 
-      for (size_t j = 1; j < nn_indices.size (); ++j)             // nn_indices[0] should be sq_idx
+      for (std::size_t j = 1; j < nn_indices.size (); ++j)             // nn_indices[0] should be sq_idx
       {
         if (processed[nn_indices[j]])                             // Has this point been processed before ?
           continue;
@@ -100,7 +100,7 @@ pcl::seededHueSegmentation (const PointCloud<PointXYZRGB>          &cloud,
         PointXYZHSV h_l;
         PointXYZRGBtoXYZHSV(p_l, h_l);
 
-        if (fabs(h_l.h - h.h) < delta_hue)
+        if (std::fabs(h_l.h - h.h) < delta_hue)
         {
           seed_queue.push_back (nn_indices[j]);
           processed[nn_indices[j]] = true;
@@ -164,7 +164,7 @@ pcl::seededHueSegmentation (const PointCloud<PointXYZRGB>            &cloud,
         sq_idx++;
         continue;
       }
-      for (size_t j = 1; j < nn_indices.size (); ++j)             // nn_indices[0] should be sq_idx
+      for (std::size_t j = 1; j < nn_indices.size (); ++j)             // nn_indices[0] should be sq_idx
       {
         if (processed[nn_indices[j]])                             // Has this point been processed before ?
           continue;
@@ -174,7 +174,7 @@ pcl::seededHueSegmentation (const PointCloud<PointXYZRGB>            &cloud,
         PointXYZHSV h_l;
         PointXYZRGBtoXYZHSV(p_l, h_l);
 
-        if (fabs(h_l.h - h.h) < delta_hue)
+        if (std::fabs(h_l.h - h.h) < delta_hue)
         {
           seed_queue.push_back (nn_indices[j]);
           processed[nn_indices[j]] = true;

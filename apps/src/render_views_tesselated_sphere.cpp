@@ -121,7 +121,7 @@ pcl::apps::RenderViewsTesselatedSphere::generateViews() {
     vtkSmartPointer<vtkCellArray> cells_sphere = sphere->GetPolys ();
     cam_positions.resize (sphere->GetNumberOfPolys ());
 
-    size_t i=0;
+    std::size_t i=0;
     for (cells_sphere->InitTraversal (); cells_sphere->GetNextCell (npts_com, ptIds_com);)
     {
       sphere->GetPoint (ptIds_com[0], p1_com);
@@ -145,7 +145,7 @@ pcl::apps::RenderViewsTesselatedSphere::generateViews() {
   }
 
   /*int valid = 0;
-  for (size_t i = 0; i < cam_positions.size (); i++)
+  for (std::size_t i = 0; i < cam_positions.size (); i++)
   {
     if (campos_constraints_func_ (cam_positions[i]))
     {
@@ -203,7 +203,7 @@ pcl::apps::RenderViewsTesselatedSphere::generateViews() {
     //If the view up is parallel to ray cam_pos - focalPoint then the transformation
     //is singular and no points are rendered...
     //make sure it is perpendicular
-    if (fabs (cam_pos_3f.dot (test)) == 1)
+    if (std::abs (cam_pos_3f.dot (test)) == 1)
     {
       //parallel, create
       test = cam_pos_3f.cross (Eigen::Vector3f::UnitX ());

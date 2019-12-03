@@ -48,8 +48,7 @@ using pcl::console::print_error;
 using pcl::console::print_info;
 using pcl::console::print_value;
 
-//boost::mutex mutex_;
-boost::shared_ptr<pcl::ImageGrabber<pcl::PointXYZRGBA> > grabber;
+pcl::ImageGrabber<pcl::PointXYZRGBA>::Ptr grabber;
 pcl::PointCloud<pcl::PointXYZRGBA>::ConstPtr cloud_;
 std::string out_folder;
 int counter;
@@ -134,7 +133,10 @@ main (int argc, char** argv)
   //grabber->setFocalLength(focal_length); // FIXME
 
   EventHelper h;
-  boost::function<void(const pcl::PointCloud<pcl::PointXYZRGBA>::ConstPtr&) > f = boost::bind (&EventHelper::cloud_cb, &h, _1);
+  std::function<void(const pcl::PointCloud<pcl::PointXYZRGBA>::ConstPtr&) > f = [&] (const pcl::PointCloud<pcl::PointXYZRGBA>::ConstPtr& cloud)
+  {
+    h.cloud_cb (cloud);
+  };
   boost::signals2::connection c1 = grabber->registerCallback (f);
 
   do

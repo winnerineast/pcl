@@ -49,12 +49,12 @@ namespace pcl
         }
       } sortIndexScoresOp;
 
-      typedef typename pcl::PointCloud<PointInT>::Ptr PointInTPtr;
-      typedef typename pcl::PointCloud<PointInT>::ConstPtr ConstPointInTPtr;
+      using PointInTPtr = typename pcl::PointCloud<PointInT>::Ptr;
+      using ConstPointInTPtr = typename pcl::PointCloud<PointInT>::ConstPtr;
 
-      typedef Distance<float> DistT;
-      typedef Model<PointInT> ModelT;
-      typedef pcl::PointCloud<pcl::Histogram<90> > CRHPointCloud;
+      using DistT = Distance<float>;
+      using ModelT = Model<PointInT>;
+      using CRHPointCloud = pcl::PointCloud<pcl::Histogram<90> >;
 
       /** \brief Directory where the trained structure will be saved */
       std::string training_dir_;
@@ -95,7 +95,7 @@ namespace pcl
 
       bool use_cache_;
       std::map<std::pair<std::string, int>, Eigen::Matrix4f,
-               std::less<std::pair<std::string, int> >,
+               std::less<>,
                Eigen::aligned_allocator<std::pair<const std::pair<std::string, int>, Eigen::Matrix4f> > > poses_cache_;
       std::map<std::pair<std::string, int>, Eigen::Vector3f > centroids_cache_;
 
@@ -113,8 +113,8 @@ namespace pcl
 
         flann::Matrix<float> flann_data (new float[models.size () * models[0].descr.size ()], models.size (), models[0].descr.size ());
 
-        for (size_t i = 0; i < data.rows; ++i)
-          for (size_t j = 0; j < data.cols; ++j)
+        for (std::size_t i = 0; i < data.rows; ++i)
+          for (std::size_t j = 0; j < data.cols; ++j)
           {
             flann_data.ptr ()[i * data.cols + j] = models[i].descr[j];
           }

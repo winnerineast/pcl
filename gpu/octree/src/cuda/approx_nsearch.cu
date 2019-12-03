@@ -34,8 +34,9 @@
  *  Author: Anatoly Baskeheev, Itseez Ltd, (myname.mysurname@mycompany.com)
  */
 
+#include <limits>
+
 #include "internal.hpp"
-#include "pcl/gpu/utils/device/limits.hpp"
 #include "pcl/gpu/utils/device/warp.hpp"
 
 #include "utils/copygen.hpp"
@@ -45,7 +46,7 @@
 
 namespace pcl { namespace device { namespace appnearest_search
 {   
-    typedef OctreeImpl::PointType PointType;
+    using PointType = OctreeImpl::PointType;
 	
 	struct Batch
 	{   
@@ -193,7 +194,7 @@ namespace pcl { namespace device { namespace appnearest_search
             __shared__ volatile int   index[CTA_SIZE];
 			
             int tid = threadIdx.x;
-			dist2[tid] = pcl::device::numeric_limits<float>::max();
+			dist2[tid] = std::numeric_limits<float>::max();
 
 			//serial step
             for (int idx = Warp::laneId(); idx < length; idx += Warp::STRIDE)
@@ -287,7 +288,7 @@ namespace pcl { namespace device { namespace appnearest_search
 
 void pcl::device::OctreeImpl::approxNearestSearch(const Queries& queries, NeighborIndices& results) const
 {
-    typedef pcl::device::appnearest_search::Batch BatchType;
+    using BatchType = pcl::device::appnearest_search::Batch;
 
     BatchType batch;
     batch.indices = indices;

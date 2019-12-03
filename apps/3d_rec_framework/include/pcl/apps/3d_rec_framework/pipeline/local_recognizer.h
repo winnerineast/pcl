@@ -38,11 +38,11 @@ namespace pcl
       class PCL_EXPORTS LocalRecognitionPipeline
       {
 
-        typedef typename pcl::PointCloud<PointInT>::Ptr PointInTPtr;
-        typedef typename pcl::PointCloud<PointInT>::ConstPtr ConstPointInTPtr;
+        using PointInTPtr = typename pcl::PointCloud<PointInT>::Ptr;
+        using ConstPointInTPtr = typename pcl::PointCloud<PointInT>::ConstPtr;
 
-        typedef Distance<float> DistT;
-        typedef Model<PointInT> ModelT;
+        using DistT = Distance<float>;
+        using ModelT = Model<PointInT>;
 
         /** \brief Directory where the trained structure will be saved */
         std::string training_dir_;
@@ -87,7 +87,7 @@ namespace pcl
 
         bool use_cache_;
         std::map<std::pair<std::string, int>, Eigen::Matrix4f,
-                 std::less<std::pair<std::string, int> >,
+                 std::less<>,
                  Eigen::aligned_allocator<std::pair<const std::pair<std::string, int>, Eigen::Matrix4f> > > poses_cache_;
         std::map<std::pair<std::string, int>, typename pcl::PointCloud<PointInT>::Ptr> keypoints_cache_;
 
@@ -116,8 +116,8 @@ namespace pcl
 
           flann::Matrix<float> flann_data (new float[models.size () * models[0].descr.size ()], models.size (), models[0].descr.size ());
 
-          for (size_t i = 0; i < data.rows; ++i)
-            for (size_t j = 0; j < data.cols; ++j)
+          for (std::size_t i = 0; i < data.rows; ++i)
+            for (std::size_t j = 0; j < data.cols; ++j)
             {
               flann_data.ptr ()[i * data.cols + j] = models[i].descr[j];
             }
@@ -157,7 +157,7 @@ namespace pcl
           pcl::visualization::PointCloudColorHandlerCustom<PointInT> random_handler_sampled (cloud_sampled, 0, 0, 255);
           vis_corresp_.addPointCloud<PointInT> (cloud_sampled, random_handler_sampled, "sampled");
 
-          for (size_t kk = 0; kk < correspondences.size (); kk++)
+          for (std::size_t kk = 0; kk < correspondences.size (); kk++)
           {
             pcl::PointXYZ p;
             p.getVector4fMap () = oh.correspondences_pointcloud->points[correspondences[kk].index_query].getVector4fMap ();
